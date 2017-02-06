@@ -242,7 +242,7 @@ class M26TelescopeScan(Fei4RunBase):
 
     def start_readout(self, *args, **kwargs):
         super(M26TelescopeScan, self).start_readout(*args, **kwargs)
-        #self.dut['TDC']['ENABLE'] = self.enable_tdc
+        #self.tdc['ENABLE'] = self.enable_tdc
         self.dut['TLU']['RESET']=1
         self.dut['TLU']['TRIGGER_MODE']=3
         self.dut['TLU']['TRIGGER_LOW_TIMEOUT']=200
