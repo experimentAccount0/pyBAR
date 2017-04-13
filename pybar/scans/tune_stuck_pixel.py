@@ -21,10 +21,6 @@ class StuckPixelScan(DigitalScan):
         "overwrite_mask": False  # if True, overwrite existing masks
     }
 
-    # Parallel mode not supported in tunings
-    def set_scan_mode(self):
-        self.parallel = False
-
     def configure(self):
         commands = []
         commands.extend(self.register.get_commands("ConfMode"))
@@ -44,7 +40,8 @@ class StuckPixelScan(DigitalScan):
             analyze_raw_data.interpret_word_table()
             analyze_raw_data.plot_histograms()
             analyze_raw_data.interpreter.print_summary()
-#             occ_hist = make_occupancy_hist(*convert_data_array(data_array_from_data_dict_iterable(self.fifo_readout.data), filter_func=is_data_record, converter_func=get_col_row_array_from_data_record_array)).T
+#             filter_func = np.logical_and(self.raw_data_file._filter_funcs[self.current_single_handle], is_data_record)
+#             occ_hist = make_occupancy_hist(*convert_data_array(data_array_from_data_dict_iterable(self.fifo_readout.data), filter_func=filter_func, converter_func=get_col_row_array_from_data_record_array)).T
             with tb.open_file(analyze_raw_data._analyzed_data_file, 'r') as out_file_h5:
                 occ_hist = out_file_h5.root.HistOcc[:, :, 0].T
             self.occ_mask = np.zeros(shape=occ_hist.shape, dtype=np.dtype('>u1'))
