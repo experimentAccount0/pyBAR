@@ -5,10 +5,11 @@ Note:
  * Use the same enable_shift_masks and mask_steps value for all other scans (e.g. tuning).
  * In case of FE-I4A, deselect outermost double columns (0 and 39): change 'Colpr_Addr' scan parameter to range(1, 39).
 """
+import logging
+
 import numpy as np
 import tables as tb
 # from pylab import polyfit, poly1d
-import logging
 import progressbar
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.figure import Figure
@@ -173,6 +174,7 @@ class PlsrDacCalibration(Fei4RunBase):
             output_pdf.savefig(fig)
 
             output_pdf.close()
+
 
 def plot_pulser_dac(x, y, y_err=None, output_pdf=None, title_suffix=""):
     # plot result

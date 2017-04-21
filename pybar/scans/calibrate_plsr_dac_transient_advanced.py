@@ -4,9 +4,9 @@ the normal PlsrDAC calibration. Do not forget to add the oscilloscope device in 
 The oscilloscope can be any device supported by basil, but the string interpretation here is only implemented for Tektronix oscilloscopes!
 """
 import time
+
 import numpy as np
 import tables as tb
-from pylab import polyfit, poly1d
 from matplotlib.backends.backend_pdf import PdfPages
 import logging
 import progressbar
@@ -38,6 +38,7 @@ def interpret_data_from_tektronix(preamble, data):
     voltage = YZEro + YMUlt * (voltage - YOFf)
     return time, voltage, time_unit, voltage_unit
 
+
 # Select actual interpretation function
 interpret_oscilloscope_data = interpret_data_from_tektronix
 
@@ -66,7 +67,7 @@ class PlsrDacTransientCalibrationAdvanced(AnalogScan):
         "bandwidth": "FULl",
         "trigger_mode": "NORMal",
         "trigger_edge_slope": "FALL",
-        "trigger_level": 0.0, # trigger level in V of for the first measurement
+        "trigger_level": 0.0,  # trigger level in V of for the first measurement
         "fit_ranges": [(-1000, -100), (200, 450)],  # the fit range (in ns) relative to the trigger (t=0ns), first tuple: baseline, second tuple: peak
     })
 
@@ -126,10 +127,10 @@ class PlsrDacTransientCalibrationAdvanced(AnalogScan):
     def scan(self):
         # Output data structures
         scan_parameter_values = self.scan_parameters.PlsrDAC
-        shape=(len(scan_parameter_values), self.max_data_index)
+        shape = (len(scan_parameter_values), self.max_data_index)
         atom = tb.FloatAtom()
         data_out = self.raw_data_file.h5_file.create_carray(self.raw_data_file.h5_file.root, name='PlsrDACwaveforms', title='Waveforms from transient PlsrDAC calibration scan', atom=atom, shape=shape, filters=tb.Filters(complib='blosc', complevel=5, fletcher32=False))
-        shape=(self.max_data_index,)
+        shape = (self.max_data_index,)
         atom = tb.FloatAtom()
         time_out = self.raw_data_file.h5_file.create_carray(self.raw_data_file.h5_file.root, name='Times', title='Time values', atom=atom, shape=shape, filters=tb.Filters(complib='blosc', complevel=5, fletcher32=False))
         data_out.attrs.scan_parameter_values = scan_parameter_values
@@ -162,7 +163,7 @@ class PlsrDacTransientCalibrationAdvanced(AnalogScan):
                 trigger_level = trigger_levels[-1]
             self.dut['Oscilloscope'].set_trigger_level(trigger_level)
             self.dut['Oscilloscope'].set_vertical_scale(min(self.vertical_scale, (np.mean(voltages) + 0.2 * np.mean(voltages)) / 10), channel=self.channel)
-            #self.dut['Oscilloscope'].set_vertical_scale(0.05, channel=self.channel)
+#             self.dut['Oscilloscope'].set_vertical_scale(0.05, channel=self.channel)
 
             if self.show_debug_plots:
                 plt.clf()
@@ -215,7 +216,7 @@ class PlsrDacTransientCalibrationAdvanced(AnalogScan):
             data = in_file_h5.root.PlsrDACwaveforms[:]
             try:
                 times = in_file_h5.root.Times[:]
-            except NoSuchNodeError:  # for backward compatibility
+            except tb.NoSuchNodeError:  # for backward compatibility
                 times = np.array(in_file_h5.root.PlsrDACwaveforms._v_attrs.times)
             scan_parameter_values = in_file_h5.root.PlsrDACwaveforms._v_attrs.scan_parameter_values
             enable_double_columns = in_file_h5.root.PlsrDACwaveforms._v_attrs.enable_double_columns
@@ -244,7 +245,7 @@ class PlsrDacTransientCalibrationAdvanced(AnalogScan):
                         plsr_dac = scan_parameter_values[index]
 
                         # index of first value below trigger level
-                        step_index = np.argmin(voltages>trigger_level)
+                        step_index = np.argmin(voltages > trigger_level)
                         if not (step_index > start_index_baseline and step_index > stop_index_baseline):
                             logging.warning("Baseline fit range might be too large")
                         if not (step_index < start_index_peak and step_index < stop_index_peak):
@@ -289,6 +290,7 @@ class PlsrDacTransientCalibrationAdvanced(AnalogScan):
                     self.register.calibration_parameters['Vcal_Coeff_0'] = np.nan_to_num(slope_fit[0] * 1000.0)  # store in mV
                     self.register.calibration_parameters['Vcal_Coeff_1'] = np.nan_to_num(slope_fit[1] * 1000.0)  # store in mV/DAC
             progress_bar.finish()
+
 
 if __name__ == "__main__":
     RunManager('../configuration.yaml').run_run(PlsrDacTransientCalibrationAdvanced)

@@ -40,6 +40,7 @@ def interpret_data_from_tektronix(raw_data):
     times = [(float(time) - offset_x) * scale_x for time in range(len(voltages))]
     return np.array(times), np.array(voltages)
 
+
 # Select actual interpretation function
 interpret_oscilloscope_data = interpret_data_from_tektronix
 
@@ -55,8 +56,8 @@ class PlsrDacTransientCalibration(AnalogScan):
         "n_injections": 512,  # number of injections, has to be > 260 to allow for averaging 256 injection signals
         "channel": 1,  # oscilloscope channel
         "show_debug_plots": False,
-        "trigger_level_offset": 0, # trigger is automatically set between the maximum / minimum of the baseline; this can be changed by this offset in mV; for low PLsrDAC sometimes needed
-        "trigger_level_start": 60, # trigger level in mV of for the first measurement
+        "trigger_level_offset": 0,  # trigger is automatically set between the maximum / minimum of the baseline; this can be changed by this offset in mV; for low PLsrDAC sometimes needed
+        "trigger_level_start": 60,  # trigger level in mV of for the first measurement
         "max_data_index": 2001,  # maximum data index to be read out; 2001 reads date from 0 to 1999
         "fit_range_step": [(-150, -50), (50, 150)],  # the fit range for the voltage step in relative indices from the voltage step position
         "fit_range": [0, 700]  # fit range for the linear PlsrDAC transfer function

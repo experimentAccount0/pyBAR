@@ -1,4 +1,4 @@
-"""A script that runs a fast threshold scan for different parameter (e.g. GDAC, TDACVbp) to get a threshold calibration. 
+"""A script that runs a fast threshold scan for different parameter (e.g. GDAC, TDACVbp) to get a threshold calibration.
 To save time the PlsrDAC start position is the start position determined from the previous threshold scan. So the
 scan parameter values should be chosen in a ways that the threshold increases for each step.
 After the data taking the data is analyzed and the calibration is written into a h5 file.
@@ -14,7 +14,6 @@ import progressbar
 from matplotlib.backends.backend_pdf import PdfPages
 
 from pybar_fei4_interpreter import data_struct
-
 from pybar.run_manager import RunManager
 from pybar.scans.scan_threshold_fast import FastThresholdScan
 from pybar.analysis import analysis_utils

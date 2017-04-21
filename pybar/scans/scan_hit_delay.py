@@ -1,4 +1,4 @@
-''' This script changes the injection delay of the internal PlsrDAC (with global register PlsrDelay or PlsrIdacRamp, only PlsrDelay tested!) 
+''' This script changes the injection delay of the internal PlsrDAC (with global register PlsrDelay or PlsrIdacRamp, only PlsrDelay tested!)
 and measures the mean BCID for each pixel (runtime ~ 1 h).
 
 The PlsrDAC and injection delay values should be chosen equidistant and the lowest PlsrDAC value should be at threshold position!
@@ -27,7 +27,7 @@ import warnings
 from scipy.optimize import curve_fit, OptimizeWarning
 from scipy.interpolate import interp1d
 from scipy.special import erf
-warnings.simplefilter("ignore", OptimizeWarning)  # deactivate : Covariance warning
+
 from matplotlib.backends.backend_pdf import PdfPages
 from matplotlib.figure import Figure
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
@@ -41,6 +41,8 @@ from pybar.run_manager import RunManager
 from pybar.analysis.analysis_utils import get_hits_of_scan_parameter, get_scan_parameter, get_mean_from_histogram
 from pybar.analysis.analyze_raw_data import AnalyzeRawData
 from pybar.analysis.plotting.plotting import plot_scurves, plot_three_way
+
+warnings.simplefilter("ignore", OptimizeWarning)  # deactivate : Covariance warning
 
 
 def scurve(x, offset, mu, sigma):
