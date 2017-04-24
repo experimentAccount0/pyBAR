@@ -41,7 +41,7 @@ class StuckPixelScan(DigitalScan):
             analyze_raw_data.interpret_word_table()
             analyze_raw_data.plot_histograms()
             analyze_raw_data.interpreter.print_summary()
-#             filter_func = logical_and(self.raw_data_file._filter_funcs[self.current_single_handle], is_data_record)
+#             filter_func = logical_and(self.raw_data_file._filter_funcs[self.current_module_handle], is_data_record)
 #             occ_hist = make_occupancy_hist(*convert_data_array(data_array_from_data_dict_iterable(self.fifo_readout.data), filter_func=filter_func, converter_func=get_col_row_array_from_data_record_array)).T
             with tb.open_file(analyze_raw_data._analyzed_data_file, 'r') as out_file_h5:
                 occ_hist = out_file_h5.root.HistOcc[:, :, 0].T
