@@ -10,7 +10,7 @@ PyBAR is *not only* targeting experienced users and developers. The easy-to-use 
 
 The features of the FPGA firmware in a nutshell:
 - supported readout hardware:
-  MIO, MIO3/MMC3, Avnet LX9 and Digilent Nexys<sup>TM</sup>4 DDR
+  MIO, MIO3, MMC3, Avnet LX9 and Digilent Nexys<sup>TM</sup>4 DDR
 - supported adapter cards:
   Single Chip Adapter Card, Burn-in Card (Quad Module Adapter Card) and the General Purpose Analog Card (GPAC)
 - readout of multiple FE readout chips (dul/quad module, stave), simultaneous readout (e.g., triggered readout)
