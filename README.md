@@ -1,9 +1,9 @@
 
 # pyBAR [![Code Status](https://landscape.io/github/SiLab-Bonn/pyBAR/master/landscape.svg?style=flat)](https://landscape.io/github/SiLab-Bonn/pyBAR/master) [![Build Status](https://travis-ci.org/SiLab-Bonn/pyBAR.svg?branch=master)](https://travis-ci.org/SiLab-Bonn/pyBAR) [![Build Status](https://ci.appveyor.com/api/projects/status/github/SiLab-Bonn/pyBAR?svg=true)](https://ci.appveyor.com/project/DavidLP/pybar-71xwl)
 
-pyBAR - Bonn ATLAS Readout in Python and C++
+pyBAR - Bonn ATLAS Readout in Python
 
-PyBAR is a versatile readout and test system for the ATLAS FE-I4(A/B) pixel readout chip. It uses the [basil](https://github.com/SiLab-Bonn/basil) framework to access the readout hardware.
+PyBAR is a versatile readout and test system for the ATLAS FEI4 and Mimosa26 pixel detectors. It uses the [basil](https://github.com/SiLab-Bonn/basil) framework to access the readout hardware.
 PyBAR's FPGA firmware and host software includes support for different hardware platforms.
 
 PyBAR is *not only* targeting experienced users and developers. The easy-to-use scripts allow a quick setup and start. PyBAR is a very flexible readout and test system and can be adapted to any needs.
