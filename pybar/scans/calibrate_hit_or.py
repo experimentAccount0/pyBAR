@@ -79,7 +79,7 @@ def create_hitor_calibration(output_filename, plot_pixel_calibrations=False):
                         else:
                             raise ValueError("Unknown scan parameter %s" % item)
 
-                    # Only pixel of actual column/row should be in the actual data chunk but since SRAM is not cleared for each scan step due to speed reasons and there might be noisy pixels this is not always the case
+                    # Only pixel of actual column/row should be in the actual data chunk but since FIFO is not cleared for each scan step due to speed reasons and there might be noisy pixels this is not always the case
                     n_wrong_pixel = np.count_nonzero(np.logical_or(actual_hits['column'] != actual_col, actual_hits['row'] != actual_row))
                     if n_wrong_pixel != 0:
                         logging.warning('%d hit(s) from other pixels for scan parameters %s', n_wrong_pixel, ', '.join(['%s=%s' % (name, value) for (name, value) in zip(scan_parameter_names, actual_scan_parameter_values)]))
@@ -211,8 +211,8 @@ class HitOrCalibration(Fei4RunBase):
             commands.append(self.register.get_commands("WrRegister", name=["Colpr_Addr"])[0])
             self.register_utils.send_commands(commands)
 
-            self.tdc['ENABLE'] = True
-            self.tdc['EN_NO_WRITE_TRIG_ERR'] = False  # Do not trigger TDC words
+            self.dut['TDC']['ENABLE'] = True
+            self.dut['TDC']['EN_NO_WRITE_TRIG_ERR'] = False  # Do not trigger TDC words
             for scan_parameter_value in scan_parameter_values:
                 if self.stop_run.is_set():
                     break
@@ -224,12 +224,12 @@ class HitOrCalibration(Fei4RunBase):
                 commands.extend(self.register.get_commands("RunMode"))
                 self.register_utils.send_commands(commands)
 
-                self.tdc['EN_ARMING'] = True
-                with self.readout(reset_sram_fifo=False, clear_buffer=False, column=column, row=row, **{scan_parameter_name: scan_parameter_value}):
+                self.dut['TDC']['EN_ARMING'] = True
+                with self.readout(reset_fifo=False, clear_buffer=False, column=column, row=row, **{scan_parameter_name: scan_parameter_value}):
                     self.register_utils.send_command(command=cal_lvl1_command, repeat=self.n_injections)
-                self.tdc['EN_ARMING'] = False
+                self.dut['TDC']['EN_ARMING'] = False
 
-            self.tdc['ENABLE'] = False
+            self.dut['TDC']['ENABLE'] = False
 
     def handle_data(self, data):
         self.raw_data_file.append_item(data, scan_parameters=self.scan_parameters._asdict(), new_file=['column'], flush=True)  # Create new file for each scan parameter change
